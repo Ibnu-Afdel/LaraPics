@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -46,6 +47,8 @@ class PostController extends Controller
         }else{
             $attributes['image'] = null ;
         }
+
+        $attributes['user_id'] = Auth::user()->id;
 
         $post = Post::create($attributes);
 

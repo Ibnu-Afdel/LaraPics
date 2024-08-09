@@ -8,6 +8,8 @@
 @endif
 <br><br>
 <a href="{{ route('posts.index') }}">Back</a><br>
+
+@can('can-edit', $post)
 <a href="{{ route('posts.edit', $post) }}">Edit</a><br>
 
 <form action="{{ route('posts.destroy',$post) }}" method="POST" class="hidden">
@@ -15,6 +17,8 @@
     @method('DELETE')
     <button>Delete</button>
 </form>
+@endcan
+
 
 
 </x-layout>
