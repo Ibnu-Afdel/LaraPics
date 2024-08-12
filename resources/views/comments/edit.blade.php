@@ -1,22 +1,24 @@
 <x-layout>
-    @section('title', 'Create Tag')
-    @section('heading', 'Create Tag')
+    @section('title', 'Comment Edit')
+    @section('heading', 'Edit Comment')
 
     <div class="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-        <form action="{{ route('admin.store') }}" method="POST">
+        <form action="{{ route('comment.update', $comment) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700">Tag Name</label>
+                <label for="comment" class="block text-sm font-medium text-gray-700">Comment</label>
                 <input 
                     type="text" 
-                    name="name" 
-                    id="name" 
+                    name="comment" 
+                    id="comment" 
                     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    placeholder="Enter tag name"
+                    value="{{ old('comment', $comment->comment) }}"
+                    placeholder="Edit your comment"
                     required
                 >
-                @error('name')
+                @error('comment')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -26,7 +28,7 @@
                     type="submit" 
                     class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
-                    Create
+                    Update Comment
                 </button>
             </div>
         </form>

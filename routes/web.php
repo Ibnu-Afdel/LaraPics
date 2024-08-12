@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionController;
@@ -18,8 +20,12 @@ Route::middleware('auth')->group(function(){
         ->can('can-edit','post');
         Route::delete('/posts/{post}' , 'destroy')->name('posts.destroy')
         ->can('can-edit','post');
+        Route::get('/posts/tag/{tag}', 'postsByTag')->name('posts.byTag');
     });
     Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+    Route::post('/posts/{post}/like', [LikeController::class, 'like'])->name('posts.like');
+    Route::delete('/posts/{post}/like', [LikeController::class, 'unlike'])->name('posts.unlike');
+
 });
 
 Route::middleware('guest')->group(function(){
@@ -39,9 +45,25 @@ Route::middleware('admin')->group(function(){
     });
 });
 
+// Route::get('/post/comments', [PostController::class, 'show'])->name('comments');
+
+Route::middleware('auth')->group(function(){
+    Route::controller(CommentController::class)->group(function(){
+        Route::post('posts/{post}/comment', 'store' )->name('comment.store');
+        Route::get('comments/{comment}/edit', 'edit' )->name('comment.edit')
+        ->can('can-comment','comment');;
+        Route::put('comments/{comment}', 'update' )->name('comment.update')
+        ->can('can-comment','comment');;
+        Route::delete('comments/{comment}', 'destroy' )->name('comment.destroy')
+        ->can('can-comment','comment');;
+    });
+});
+
 Route::get('/' , [PostController::class , 'index' ])->name('posts.index');
 Route::get('/posts' , [PostController::class , 'index' ])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class , 'show' ])->name('posts.show');
+Route::get('/search', [PostController::class, 'search'])->name('posts.search');
+
 
 
 

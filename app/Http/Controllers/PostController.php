@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -13,9 +14,24 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('posts.index', ['posts' => Post::all(), 'tags'=>Tag::all()]);
+        $query = $request->input('query');
+
+        // if ($query) {
+            // If there's a search query, filter the posts
+            $posts = Post::where('title', 'LIKE', "%{$query}%")
+                        ->orWhere('body', 'LIKE', "%{$query}%")
+                        ->orWhereHas('tags', function ($q) use ($query) {
+                            $q->where('name', 'LIKE', "%{$query}%");
+                        })
+                        ->get();
+        // }else {
+            $posts = Post::with('user')->orderBy('created_at' ,'desc')->get();
+            $tags = Tag::get();
+            $comment = Comment::with('user')->get();
+        // }
+        return view('posts.index', compact('posts', 'tags', 'query', 'comment'));
     }
 
     /**
@@ -33,7 +49,7 @@ class PostController extends Controller
     {
         $attributes = $request->validate([
             'caption' => 'required',
-            'image' => 'nullable|image|mimes:png,jpg',
+            'image' => 'nullable|image|mimes:png,jpg|max:10240',
         ]);
 
         $request->validate([
@@ -65,6 +81,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->load('comments.user');
         return view('posts.show', ['post' => $post]);
     }
 
@@ -118,5 +135,30 @@ class PostController extends Controller
         }
         $post->delete();
         return redirect()->route('posts.index');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $posts = Post::where('caption', 'LIKE' , "%{$query}%")
+        ->orWhereHas('tags', function($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%");
+        }) -> get();
+
+        $tags = Tag::get();
+
+
+        return  view('posts.search', compact('posts', 'query', 'tags'));
+    }
+
+    public function postsByTag($tagId)
+    {
+        $tag = Tag::findOrFail($tagId);
+        $posts = $tag->posts()->get();
+
+        return view('posts.index', [
+            'posts' => $posts,
+            'tags' => Tag::all(),
+        ]);
     }
 }
