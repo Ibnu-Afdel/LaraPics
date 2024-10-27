@@ -23,7 +23,7 @@ class LikePost extends Component
     public function toggleLike()
     {
         if (!Auth::check()) {
-            return redirect()->route('login'); // Redirect to login if the user is not authenticated
+            return redirect()->route('login');
         }
         if ($this->isLiked) {
             $this->post->likes()->where('user_id', Auth::id())->delete();

@@ -16,22 +16,10 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->input('query');
-
-        // if ($query) {
-            // If there's a search query, filter the posts
-            $posts = Post::where('title', 'LIKE', "%{$query}%")
-                        ->orWhere('body', 'LIKE', "%{$query}%")
-                        ->orWhereHas('tags', function ($q) use ($query) {
-                            $q->where('name', 'LIKE', "%{$query}%");
-                        })
-                        ->get();
-        // }else {
             $posts = Post::with('user')->orderBy('created_at' ,'desc')->get();
-            $tags = Tag::get();
-            $comment = Comment::with('user')->get();
-        // }
-        return view('posts.index', compact('posts', 'tags', 'query', 'comment'));
+
+        $tags = Tag::get();
+        return view('posts.index', compact('posts', 'tags'));
     }
 
     /**
@@ -39,7 +27,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create' , ['tags'=>Tag::all()]);
+        return view('posts.create' , ['tags'=>Tag::get()]);
     }
 
     /**
@@ -49,7 +37,7 @@ class PostController extends Controller
     {
         $attributes = $request->validate([
             'caption' => 'required',
-            'image' => 'nullable|image|mimes:png,jpg|max:10240',
+            'image' => 'nullable|image|mimes:png,jpg|max:1024',
         ]);
 
         $request->validate([
@@ -90,7 +78,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.edit', ['post' => $post,  'tags'=>Tag::all()]);
+        return view('posts.edit', ['post' => $post,  'tags'=>Tag::get()]);
     }
 
     /**
@@ -103,7 +91,7 @@ class PostController extends Controller
             'image' => 'nullable|image|mimes:png,jpg'
         ]);
 
-        
+
         $request->validate([
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
@@ -116,7 +104,7 @@ class PostController extends Controller
             $filepath = $request->file('image')->store('images', 'public');
             $attributes['image'] = Storage::url($filepath);
         }
-        
+
 
         $post->update($attributes);
 
@@ -139,16 +127,18 @@ class PostController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('query');
-        $posts = Post::where('caption', 'LIKE' , "%{$query}%")
-        ->orWhereHas('tags', function($q) use ($query) {
-            $q->where('name', 'LIKE', "%{$query}%");
-        }) -> get();
+        // changed to livewire, will be deleted in the next commits
 
-        $tags = Tag::get();
-
-
-        return  view('posts.search', compact('posts', 'query', 'tags'));
+//        $query = $request->input('query');
+//        $posts = Post::where('caption', 'LIKE' , "%{$query}%")
+//        ->orWhereHas('tags', function($q) use ($query) {
+//            $q->where('name', 'LIKE', "%{$query}%");
+//        }) -> get();
+//
+//        $tags = Tag::get();
+//
+//
+//        return  view('posts.search', compact('posts', 'query', 'tags'));
     }
 
     public function postsByTag($tagId)

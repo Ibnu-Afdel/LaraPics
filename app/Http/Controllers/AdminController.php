@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.index', ['tags'=> Tag::all()]);
+        return view('admin.index', ['tags'=> Tag::get()]);
     }
 
     public function create()

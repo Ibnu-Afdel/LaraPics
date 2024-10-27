@@ -14,7 +14,7 @@ class Search extends Component
 
     public function mount()
     {
-        $this->tags = Tag::all();
+        $this->tags = Tag::get();
     }
 
     public function updateQuery()
