@@ -39,38 +39,40 @@
     <!-- Comments Section -->
     <div class="bg-white rounded-lg p-6">
         <h2 class="text-gray-800 text-2xl mb-4">Comments</h2>
-        <form method="POST" action="{{ route('comment.store', $post) }}" class="mb-6">
-            @csrf
-            <input type="hidden" name="post_id" value="{{ $post->id }}">
-            <div class="mb-4">
-                <label for="comment" class="block text-gray-600">Your Comment:</label>
-                <input type="text" name="comment" id="comment" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                @error('comment')
-                    <span class="text-red-500 text-sm">{{ $message }}</span>
-                @enderror
-            </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Comment</button>
-        </form>
+{{--        <form method="POST" action="{{ route('comment.store', $post) }}" class="mb-6">--}}
+{{--            @csrf--}}
+{{--            <input type="hidden" name="post_id" value="{{ $post->id }}">--}}
+{{--            <div class="mb-4">--}}
+{{--                <label for="comment" class="block text-gray-600">Your Comment:</label>--}}
+{{--                <input type="text" name="comment" id="comment" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">--}}
+{{--                @error('comment')--}}
+{{--                    <span class="text-red-500 text-sm">{{ $message }}</span>--}}
+{{--                @enderror--}}
+{{--            </div>--}}
+{{--            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Comment</button>--}}
+{{--        </form>--}}
 
         <!-- Displaying Comments -->
         <div>
-            @forelse ($post->comments as $comment)
-                <div class="border-b border-gray-300 mb-4 pb-4">
-                    <p class="text-gray-800"><strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}</p>
-                    @can('can-comment', $comment)
-                        <div class="flex justify-end mt-2">
-                            <a href="{{ route('comment.edit', $comment) }}" class="text-blue-500 hover:underline mr-2">Edit</a>
-                            <form method="POST" action="{{ route('comment.destroy', $comment) }}" class="inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:underline">Delete</button>
-                            </form>
-                        </div>
-                    @endcan
-                </div>
-            @empty
-                <p class="text-gray-500">No comments yet.</p>
-            @endforelse
+{{--            @forelse ($post->comments as $comment)--}}
+{{--                <div class="border-b border-gray-300 mb-4 pb-4">--}}
+{{--                    <p class="text-gray-800"><strong>{{ $comment->user->name }}:</strong> {{ $comment->comment }}</p>--}}
+{{--                    @can('can-comment', $comment)--}}
+{{--                        <div class="flex justify-end mt-2">--}}
+{{--                            <a href="{{ route('comment.edit', $comment) }}" class="text-blue-500 hover:underline mr-2">Edit</a>--}}
+{{--                            <form method="POST" action="{{ route('comment.destroy', $comment) }}" class="inline-block">--}}
+{{--                                @csrf--}}
+{{--                                @method('DELETE')--}}
+{{--                                <button type="submit" class="text-red-500 hover:underline">Delete</button>--}}
+{{--                            </form>--}}
+{{--                        </div>--}}
+{{--                    @endcan--}}
+{{--                </div>--}}
+{{--            @empty--}}
+{{--                <p class="text-gray-500">No comments yet.</p>--}}
+{{--            @endforelse--}}
+
+            <livewire:comment-post :post="$post" />
         </div>
     </div>
 </x-layout>
