@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>@yield('title', 'LaraPic')</title>
+    @livewireStyles
 </head>
 <body class="bg-slate-800">
     <nav class="flex justify-between items-center p-4">
@@ -31,5 +32,6 @@
         <hr class="my-4 border-gray-600">
         {{ $slot }}
     </div>
+    @livewireScripts
 </body>
 </html>

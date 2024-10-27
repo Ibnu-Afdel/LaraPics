@@ -5,13 +5,13 @@
             <a href="{{ route('posts.create') }}" class="text-white bg-blue-500 hover:bg-blue-600 rounded-full px-6 py-2 transition-all duration-300 shadow-md">
                 Create
             </a>
-            
-            <div class="mt-8 text-center">
-                <form action="{{ route('posts.search') }}" method="GET">
-                    <input type="text" name="query" placeholder="Search for posts or tags" required class="w-full md:w-1/2 p-2 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400">
-                    <button type="submit" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Search</button>
-                </form>
-            </div>
+
+{{--            <div class="mt-8 text-center">--}}
+{{--                <form action="{{ route('posts.search') }}" method="GET">--}}
+{{--                    <input type="text" name="query" placeholder="Search for posts or tags" required class="w-full md:w-1/2 p-2 rounded-lg shadow-md focus:ring-2 focus:ring-blue-400">--}}
+{{--                    <button type="submit" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Search</button>--}}
+{{--                </form>--}}
+{{--            </div>--}}
 
             <div class="mt-10 m-20">
                 @forelse ($posts as $post)
@@ -49,8 +49,9 @@
                                         @foreach($post->tags as $tag)
                                         <span class="bg-gray-200 text-gray-600 rounded-full px-2 py-1 hover:bg-gray-800 hover:text-white">{{ $tag->name }}</span>
                                         @endforeach
-                                @endif                            
+                                @endif
                             </div>
+
 
                             <div class="flex items-center justify-between text-sm px-2">
                                 <div class="flex items-center gap-1">
@@ -72,7 +73,7 @@
                                         @endif
                                     </form>
                                     <p>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</p>
-                                    
+
                                 </div>
 
                                 <a href="{{ route('posts.show', $post) }}" class="font-bold hover:bg-gray-800 hover:rounded-full hover:px-4 hover:py-3 hover:text-white transition-all">
@@ -88,9 +89,10 @@
                         No post available yet!
                     </p>
                 </div>
-                
+
                 @endforelse
             </div>
+
         </div>
 
 
@@ -121,13 +123,14 @@
 
                     </section>
                 </div>
+                <livewire:search />
             </div>
-        
+
             <div class="mt-16">
                 {{-- others --}}
             </div>
         </div>
-        
+
     </div>
 </x-layout>
 
